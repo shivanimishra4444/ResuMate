@@ -1,20 +1,28 @@
 <script setup lang="ts">
-// Home view
+import { ref } from 'vue'
+import LeftHandNavigation from '../components/LeftHandNavigation.vue'
+import ChatContainer from './ChatContainer.vue'
+
+// State for current chat/resume
+const currentResumeId = ref<string>('')
+
+// Handle chat selection
+const handleChatSelected = (chatId: string) => {
+  currentResumeId.value = chatId
+}
+
+// Handle new chat creation
+const handleNewChatCreated = () => {
+  currentResumeId.value = ''
+}
 </script>
 
 <template>
-  <div class="home">
-    <div class="max-w-4xl mx-auto p-6">
-      <h2 class="text-2xl font-semibold mb-6">Welcome</h2>
-      <div class="bg-white rounded-lg shadow p-6">
-        <p class="text-gray-600">Start building your application here.</p>
-      </div>
-    </div>
+  <div class="h-screen flex overflow-hidden bg-gray-100">
+    <LeftHandNavigation 
+      @chat-selected="handleChatSelected"
+      @new-chat-created="handleNewChatCreated"
+    />
+    <ChatContainer :selected-resume-id="currentResumeId" />
   </div>
 </template>
-
-<style scoped>
-.home {
-  padding: 1rem;
-}
-</style>

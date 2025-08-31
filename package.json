@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@vueuse/core": "^13.8.0",
+    "reka-ui": "^2.5.0"
+  }
+}
