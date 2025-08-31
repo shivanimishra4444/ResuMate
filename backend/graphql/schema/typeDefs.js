@@ -31,13 +31,13 @@ const typeDefs = gql`
   }
 
   enum SectionType {
-    NAME
-    TITLE
-    SUMMARY
-    SKILLS
-    EXPERIENCE
-    PROJECTS
-    EDUCATION
+    name
+    title
+    summary
+    skills
+    experience
+    projects
+    education
   }
 
   enum MessageSender {
@@ -46,22 +46,54 @@ const typeDefs = gql`
   }
 
   type Query {
-    resumes: [Resume!]!
-    resume(id: ID!): Resume
-    chat(resumeId: ID!): Chat
+    _empty: String
+    getAllResumes: [Resume!]!
+    getCompleteResume(id: ID!): CompleteResumeResponse!
   }
 
   type Mutation {
     createResume(title: String!): Resume!
     updateResume(id: ID!, title: String, sections: [ResumeSectionInput!]): Resume!
-    deleteResume(id: ID!): Boolean!
-    addMessage(chatId: ID!, content: String!, sender: MessageSender!): ChatMessage!
+
+    # AI-powered mutations
+    processUserMessage(resumeId: ID!, message: String!): ChatResponse!
+  }
+
+
+
+  type ChatResponse {
+    success: Boolean!
+    userMessage: ChatMessage
+    botMessage: ChatMessage
+    updatedResume: Resume
+    generatedContent: String
+    updatedSection: String
+    currentStep: ConversationStep
+    showCompleteResume: Boolean
+    completeResumeData: CompleteResumeResponse
+    error: String
+  }
+
+  type ConversationStep {
+    section: String!
+    expectingInput: Boolean!
+    isFirstMessage: Boolean!
   }
 
   input ResumeSectionInput {
     type: SectionType!
     content: String!
     modifiedByAI: Boolean!
+  }
+
+  type CompleteResumeResponse {
+    success: Boolean!
+    resume: Resume
+    isComplete: Boolean!
+    completionPercentage: Float!
+    missingSections: [SectionType!]!
+    formattedResume: String
+    error: String
   }
 `;
 
